@@ -44,7 +44,7 @@ splashWindow.hide();
 mainMenu.on('select', function(e) {
   //'Box Office' movies selected
   if(e.itemIndex == 0) {
-    // Make request to api.rottentomatoes.com
+    // Make request to api.rottentomatoes.com for Box Office movies
     ajax(
       {
         url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?limit=20&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
@@ -55,9 +55,10 @@ mainMenu.on('select', function(e) {
         //fill Box Office Movies list
         for(var i = 0; i < 20; i++) {
           var title = data.movies[i].title;
+          var id = data.movies[i].id;
           boxOfficeItems.push({
             title: title,
-            subtitle: ""
+            subtitle: id,
           });
         }
         
@@ -72,14 +73,35 @@ mainMenu.on('select', function(e) {
         
         // Add action for selected 'Box Office' movie
         boxOfficeMenu.on('select', function(e) {
-           var content = "test";
-           // Create detail Card for a selected movie 
-           var movieCard = new UI.Card({
-             title:'Movie Details',
-             subtitle:e.item.subtitle,
-             body: content
-           });
-           movieCard.show();    
+            // Make request to api.rottentomatoes.com for selected movie
+            ajax(
+            {
+              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+              type:'json'
+            },
+            function(data) {
+              var title = data.title;
+              var year = data.year;
+              var synopsis = data.synopsis;
+              var criticScore = data.ratings.critics_score;
+              var audienceScore = data.ratings.audience_score;
+              var content = "Critic Score: " + criticScore; 
+              content += "\nAudience Score: ";
+              content += audienceScore;
+              content += "\n" + synopsis;
+              // Create detail Card for a selected movie 
+              var movieCard = new UI.Card({
+                 title: title,
+                 subtitle: year,
+                 body: content,
+                 scrollable: true
+               });
+              movieCard.show();    
+            },
+            function(error) {
+              console.log('Error: ' + error);
+            }
+          );
         });
       },
       function(error) {
