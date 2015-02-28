@@ -69,11 +69,23 @@ mainMenu.on('select', function(e) {
           }]
         });
         boxOfficeMenu.show();  
+        
+        // Add action for selected 'Box Office' movie
+        boxOfficeMenu.on('select', function(e) {
+           var content = "test";
+           // Create detail Card for a selected movie 
+           var movieCard = new UI.Card({
+             title:'Movie Details',
+             subtitle:e.item.subtitle,
+             body: content
+           });
+           movieCard.show();    
+        });
       },
       function(error) {
-        console.log('Download failed: ' + error);
+        console.log('Error: ' + error);
       }
     );
- 
   }
 });
+
