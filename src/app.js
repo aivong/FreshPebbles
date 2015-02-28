@@ -36,6 +36,32 @@ var mainMenu = new UI.Menu({
   }]
 });
 
+function loadMovie(data) {
+  var title = data.title;
+  var year = data.year;
+  var synopsis = data.synopsis;
+  var criticScore = data.ratings.critics_score;
+  var audienceScore = data.ratings.audience_score;
+  if(criticScore == -1) {
+     criticScore = "NA";   //Not yet rated by critics
+  }
+  if(audienceScore == -1) {
+     audienceScore = "NA"; //Not yet rated by audiences
+  }
+  var content = "Critic Score: " + criticScore; 
+     content += "\nAudience Score: ";
+     content += audienceScore;
+     content += "\n" + synopsis;
+     // Create detail Card for a selected movie 
+     var movieCard = new UI.Card({
+        title: title,
+        subtitle: year,
+        body: content,
+        scrollable: true
+     });
+     movieCard.show();    
+}
+
 // Show the Menu, hide the splash
 mainMenu.show();
 splashWindow.hide();
@@ -80,29 +106,7 @@ mainMenu.on('select', function(e) {
               type:'json'
             },
             function(data) {
-              var title = data.title;
-              var year = data.year;
-              var synopsis = data.synopsis;
-              var criticScore = data.ratings.critics_score;
-              var audienceScore = data.ratings.audience_score;
-              if(criticScore == -1) {
-                criticScore = "NA";   //Not yet rated by critics
-              }
-              if(audienceScore == -1) {
-                audienceScore = "NA"; //Not yet rated by audiences
-              }
-              var content = "Critic Score: " + criticScore; 
-              content += "\nAudience Score: ";
-              content += audienceScore;
-              content += "\n" + synopsis;
-              // Create detail Card for a selected movie 
-              var movieCard = new UI.Card({
-                 title: title,
-                 subtitle: year,
-                 body: content,
-                 scrollable: true
-               });
-              movieCard.show();    
+              loadMovie(data);
             },
             function(error) {
               console.log('Error: ' + error);
@@ -151,28 +155,7 @@ mainMenu.on('select', function(e) {
               type:'json'
             },
             function(data) {
-              var title = data.title;
-              var year = data.year;
-              var synopsis = data.synopsis;
-              var criticScore = data.ratings.critics_score;
-              var audienceScore = data.ratings.audience_score;
-              if(criticScore == -1) {
-                criticScore = "NA";
-              }
-              if(audienceScore == -1) {
-                audienceScore = "NA";
-              }
-              var content = "Critic Score: " + criticScore; 
-              content += "\nAudience Score: ";
-              content += audienceScore;
-              content += "\n" + synopsis;
-              var movieCard = new UI.Card({
-                 title: title,
-                 subtitle: year,
-                 body: content,
-                 scrollable: true
-               });
-              movieCard.show();    
+              loadMovie(data);
             },
             function(error) {
               console.log('Error: ' + error);
@@ -222,28 +205,7 @@ mainMenu.on('select', function(e) {
               type:'json'
             },
             function(data) {
-              var title = data.title;
-              var year = data.year;
-              var synopsis = data.synopsis;
-              var criticScore = data.ratings.critics_score;
-              var audienceScore = data.ratings.audience_score;
-              if(criticScore == -1) {
-                criticScore = "NA";
-              }
-              if(audienceScore == -1) {
-                audienceScore = "NA";
-              }
-              var content = "Critic Score: " + criticScore; 
-              content += "\nAudience Score: ";
-              content += audienceScore;
-              content += "\n" + synopsis;
-              var movieCard = new UI.Card({
-                 title: title,
-                 subtitle: year,
-                 body: content,
-                 scrollable: true
-               });
-              movieCard.show();    
+              loadMovie(data);
             },
             function(error) {
               console.log('Error: ' + error);
