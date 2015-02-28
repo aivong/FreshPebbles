@@ -47,13 +47,13 @@ mainMenu.on('select', function(e) {
     // Make request to api.rottentomatoes.com
     ajax(
       {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?limit=10&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?limit=20&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
       },
       function(data) {
         var boxOfficeItems = [];
         //fill Box Office Movies list
-        for(var i = 0; i < 10; i++) {
+        for(var i = 0; i < 20; i++) {
           var title = data.movies[i].title;
           boxOfficeItems.push({
             title: title,
