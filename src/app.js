@@ -1,5 +1,6 @@
 var UI = require('ui');
 var Vector2 = require('vector2');
+var ajax = require('ajax');
 
 // Show splash screen while waiting for data
 var splashWindow = new UI.Window();
@@ -27,7 +28,7 @@ var mainMenuItems = [
   {title: "Upcoming Movies", subtitle: ""}
 ];
 
-// Construct Menu to show to user
+// Construct main menu to show to user
 var mainMenu = new UI.Menu({
   sections: [{
     title: 'Fresh Pebbles',
@@ -39,16 +40,40 @@ var mainMenu = new UI.Menu({
 mainMenu.show();
 splashWindow.hide();
 
-// Add an action for 'Box Office'
+// Add actions for main menu items
 mainMenu.on('select', function(e) {
+  //'Box Office' movies selected
   if(e.itemIndex == 0) {
-    var content = "test";
-    // Create the Card for a selected movie 
-    var movieCard = new UI.Card({
-      title:'Movie Details',
-      subtitle:e.item.subtitle,
-      body: content
-    });
-    movieCard.show();
+    // Make request to api.rottentomatoes.com
+    ajax(
+      {
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?limit=10&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        type:'json'
+      },
+      function(data) {
+        var boxOfficeItems = [];
+        //fill Box Office Movies list
+        for(var i = 0; i < 10; i++) {
+          var title = data.movies[i].title;
+          boxOfficeItems.push({
+            title: title,
+            subtitle: ""
+          });
+        }
+        
+        // Construct box office menu to show to user
+        var boxOfficeMenu = new UI.Menu({
+          sections: [{
+            title: 'Box Office',
+            items: boxOfficeItems
+          }]
+        });
+        boxOfficeMenu.show();  
+      },
+      function(error) {
+        console.log('Download failed: ' + error);
+      }
+    );
+ 
   }
 });
