@@ -85,6 +85,12 @@ mainMenu.on('select', function(e) {
               var synopsis = data.synopsis;
               var criticScore = data.ratings.critics_score;
               var audienceScore = data.ratings.audience_score;
+              if(criticScore == -1) {
+                criticScore = "NA";   //Not yet rated by critics
+              }
+              if(audienceScore == -1) {
+                audienceScore = "NA"; //Not yet rated by audiences
+              }
               var content = "Critic Score: " + criticScore; 
               content += "\nAudience Score: ";
               content += audienceScore;
@@ -110,7 +116,7 @@ mainMenu.on('select', function(e) {
     );
   }
   else if (e.itemIndex == 1) {
-    // Make request to api.rottentomatoes.com for Box Office movies
+    // Make request to api.rottentomatoes.com for Opening movies
     ajax(
       {
         url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/opening.json?limit=20&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
@@ -139,7 +145,6 @@ mainMenu.on('select', function(e) {
         
         // Add action for selected 'Opening' movie
         openingMovieMenu.on('select', function(e) {
-            // Make request to api.rottentomatoes.com for selected movie
             ajax(
             {
               url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
@@ -151,11 +156,16 @@ mainMenu.on('select', function(e) {
               var synopsis = data.synopsis;
               var criticScore = data.ratings.critics_score;
               var audienceScore = data.ratings.audience_score;
+              if(criticScore == -1) {
+                criticScore = "NA";
+              }
+              if(audienceScore == -1) {
+                audienceScore = "NA";
+              }
               var content = "Critic Score: " + criticScore; 
               content += "\nAudience Score: ";
               content += audienceScore;
               content += "\n" + synopsis;
-              // Create detail Card for a selected movie 
               var movieCard = new UI.Card({
                  title: title,
                  subtitle: year,
@@ -206,7 +216,6 @@ mainMenu.on('select', function(e) {
         
         // Add action for selected 'Upcoming' movie
         upcomingMovieMenu.on('select', function(e) {
-            // Make request to api.rottentomatoes.com for selected movie
             ajax(
             {
               url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
@@ -218,11 +227,16 @@ mainMenu.on('select', function(e) {
               var synopsis = data.synopsis;
               var criticScore = data.ratings.critics_score;
               var audienceScore = data.ratings.audience_score;
+              if(criticScore == -1) {
+                criticScore = "NA";
+              }
+              if(audienceScore == -1) {
+                audienceScore = "NA";
+              }
               var content = "Critic Score: " + criticScore; 
               content += "\nAudience Score: ";
               content += audienceScore;
               content += "\n" + synopsis;
-              // Create detail Card for a selected movie 
               var movieCard = new UI.Card({
                  title: title,
                  subtitle: year,
