@@ -110,6 +110,38 @@ function loadMovie(data) {
      movieCard.show();    
 }
 
+function loadCast(data) {
+     var content = "";
+     for(var i = 0; i < 9; i++) {
+          content += data.cast[i].name;
+          content += " as ";
+          if(typeof data.cast[i].characters[0] == 'undefined') {
+            content += "Unknown,\n";
+          }
+          else {
+            content += data.cast[i].characters[0] + ",\n";
+          }
+     }  
+     //Formatting for the last item
+     content += data.cast[9].name;
+     content += " as ";
+     if(typeof data.cast[9].characters[0] == 'undefined') {
+         content += "Unknown,\n";
+     }
+     else {
+         content += data.cast[9].characters[0];
+     }
+     //Construct Cast Card
+     var castCard = new UI.Card({
+          title: "Cast Info",
+          subtitle: "",
+          body: content,
+          scrollable: true,
+          style: "small"
+     });
+     castCard.show();   
+}
+
 // Show the Menu, hide the splash
 mainMenu.show();
 splashWindow.hide();
@@ -142,13 +174,13 @@ movieListsMenu.on('select', function(e) {
     // Make request to api.rottentomatoes.com for Box Office movies
     ajax(
       {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?limit=20&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?limit=10&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
       },
       function(data) {
         var boxOfficeItems = [];
         //fill Box Office Movies list
-        for(var i = 0; i < 20; i++) {
+        for(var i = 0; i < 10; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           boxOfficeItems.push({
@@ -194,9 +226,7 @@ movieListsMenu.on('select', function(e) {
                   ); 
                 }
                 //'Cast Info' selected
-                if(e.itemIndex == 1) {
-                  console.log(""+e.item.title);
-                  console.log(""+e.item.subtitle);
+                else if(e.itemIndex == 1) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
@@ -204,21 +234,7 @@ movieListsMenu.on('select', function(e) {
                           type:'json'
                       },
                       function(data) {
-                         var content = "";
-                         var total = 5;
-                         for(var i = 0; i < total; i++) {
-                            content += data.cast[i].name;
-                            content += " as ";
-                            content += data.cast[i].characters[0] + ",\n";
-                         }  
-                         var castCard = new UI.Card({
-                            title: e.item.title,
-                            subtitle: "",
-                            body: content,
-                            scrollable: true,
-                            style: "small"
-                         });
-                         castCard.show(); 
+                         loadCast(data);
                       },
                       function(error) {
                          console.log('Error: ' + error);
@@ -238,13 +254,13 @@ movieListsMenu.on('select', function(e) {
     // Make request to api.rottentomatoes.com for In Theaters movies
     ajax(
       {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?page_limit=10&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
       },
       function(data) {
         var inTheatersItems = [];
         //fill In Theaters Movies list
-        for(var i = 0; i < 20; i++) {
+        for(var i = 0; i < 10; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           inTheatersItems.push({
@@ -289,6 +305,22 @@ movieListsMenu.on('select', function(e) {
                    }
                   ); 
                }
+                //'Cast Info' selected
+                else if(e.itemIndex == 1) {
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                          loadCast(data);
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
+               }
             });
         });
       },
@@ -302,13 +334,13 @@ movieListsMenu.on('select', function(e) {
     // Make request to api.rottentomatoes.com for Opening movies
     ajax(
       {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/opening.json?limit=20&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/opening.json?limit=10&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
       },
       function(data) {
         var openingMovieItems = [];
         //fill Opening Movies list
-        for(var i = 0; i < 20; i++) {
+        for(var i = 0; i < 10; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           openingMovieItems.push({
@@ -353,6 +385,22 @@ movieListsMenu.on('select', function(e) {
                    }
                   ); 
                }
+                //'Cast Info' selected
+                else if(e.itemIndex == 1) {
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                          loadCast(data);
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
+               }
             });
         });
       },
@@ -366,14 +414,13 @@ movieListsMenu.on('select', function(e) {
     // Make request to api.rottentomatoes.com for Upcoming movies
     ajax(
       {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/upcoming.json?page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/upcoming.json?page_limit=10&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
       },
       function(data) {
-        var total = data.total;
         var upcomingMovieItems = [];
         //fill Upcoming Movies list
-        for(var i = 0; i < total; i++) {
+        for(var i = 0; i < 10; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           upcomingMovieItems.push({
@@ -418,6 +465,22 @@ movieListsMenu.on('select', function(e) {
                    }
                   ); 
                }
+                //'Cast Info' selected
+                else if(e.itemIndex == 1) {
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                          loadCast(data);
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
+               }
             });
         });
       },
@@ -434,12 +497,12 @@ dvdListsMenu.on('select', function(e) {
   if (e.itemIndex == 0) {  
      ajax(
      {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?limit=20&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?limit=10&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
      },
      function(data) {
         var topRentalsItems = [];
-        for(var i = 0; i < 20; i++) {
+        for(var i = 0; i < 10; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           topRentalsItems.push({
@@ -484,6 +547,22 @@ dvdListsMenu.on('select', function(e) {
                    }
                   ); 
                }
+                //'Cast Info' selected
+                else if(e.itemIndex == 1) {
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                        loadCast(data);
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
+               }
             });
         });
      },
@@ -496,12 +575,12 @@ dvdListsMenu.on('select', function(e) {
   else if (e.itemIndex == 1) {
      ajax(
      {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/current_releases.json?page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/current_releases.json?page_limit=10&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
      },
      function(data) {
         var currentReleaseItems = [];
-        for(var i = 0; i < 20; i++) {
+        for(var i = 0; i < 10; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           currentReleaseItems.push({
@@ -546,6 +625,22 @@ dvdListsMenu.on('select', function(e) {
                    }
                   ); 
                }
+                //'Cast Info' selected
+                else if(e.itemIndex == 1) {
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                         loadCast(data);
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
+               }
             });
         });
      },
@@ -558,12 +653,12 @@ dvdListsMenu.on('select', function(e) {
   else if (e.itemIndex == 2) {
      ajax(
      {
-        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/new_releases.json?page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/new_releases.json?page_limit=10&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
         type:'json'
      },
      function(data) {
         var newReleaseItems = [];
-        for(var i = 0; i < 20; i++) {
+        for(var i = 0; i < 10; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           newReleaseItems.push({
@@ -607,6 +702,22 @@ dvdListsMenu.on('select', function(e) {
                      console.log('Error: ' + error);
                    }
                   ); 
+               }
+                //'Cast Info' selected
+                else if(e.itemIndex == 1) {
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                          loadCast(data);
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
                }
             });
         });
