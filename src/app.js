@@ -241,6 +241,57 @@ movieListsMenu.on('select', function(e) {
                       }
                     ); 
                }
+               //'Reviews' selected
+               else if(e.itemIndex == 2) {
+                 console.log(e.item.id);
+                  // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/reviews.json?review_type=all&page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                         var freshCount = 0;
+                         var rottenCount = 0;
+                         var total = data.reviews.length;
+                         for(var i = 0; i < total; i++) {
+                           if(data.reviews[i].freshness == "rotten") {
+                             rottenCount++;
+                           }
+                           else {
+                             freshCount++;
+                           }
+                         }
+                         var freshPercentage; 
+                         var rottenPercentage;
+                         if(total !== 0) {
+                           freshPercentage = (freshCount/total)*100 + "%";
+                           rottenPercentage = (rottenCount/total)*100 + "%";
+                         }
+                         else {
+                           freshPercentage = "0%";
+                           rottenPercentage = "0%";
+                         }
+                         
+                         var reviewsMenuItems = [
+                          {title: "Fresh " + freshPercentage, subtitle: "", id: ""}, 
+                          {title: "Rotten " + rottenPercentage, subtitle: "", id: ""}, 
+                          ];
+                           
+                           // Construct reviews menu 
+                            var reviewsMenu = new UI.Menu({
+                               sections: [{
+                                    title: "",
+                                    items: reviewsMenuItems
+                               }]
+                          });
+                          reviewsMenu.show();
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
+               }
             });
       }); 
       },
