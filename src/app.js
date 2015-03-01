@@ -21,19 +21,49 @@ var text = new UI.Text({
 splashWindow.add(text);
 splashWindow.show();
 
-// Create an array of Menu items
+// Create main menu items
 var mainMenuItems = [
+  {title: "Movie Lists", subtitle: ""}, 
+  {title: "DVD Lists", subtitle: ""}, 
+  {title: "About", subtitle: ""}, 
+];
+  
+// Construct main menu to show to user
+var mainMenu = new UI.Menu({
+  sections: [{
+    title: 'Fresh Pebbles',
+    items: mainMenuItems
+  }]
+});
+
+// Create an array of 'Movie Lists' Menu items
+var movieListsMenuItems = [
   {title: "Box Office", subtitle: ""}, 
   {title: "In Theaters", subtitle: ""}, 
   {title: "Opening Movies", subtitle: ""}, 
   {title: "Upcoming Movies", subtitle: ""}
 ];
 
-// Construct main menu to show to user
-var mainMenu = new UI.Menu({
+// Construct 'Movie Lists' menu 
+var movieListsMenu = new UI.Menu({
   sections: [{
-    title: 'FreshPebbles',
-    items: mainMenuItems
+    title: 'Movie Lists',
+    items: movieListsMenuItems
+  }]
+});
+
+// Create an array of 'DVD Lists' Menu items
+var dvdListsMenuItems = [
+  {title: "Top Rentals", subtitle: ""}, 
+  {title: "Current Release DVDs", subtitle: ""}, 
+  {title: "New Release DVDs", subtitle: ""}, 
+];
+
+// Construct 'DVD Lists' menu 
+var dvdListsMenu = new UI.Menu({
+  sections: [{
+    title: 'DVD Lists',
+    items: dvdListsMenuItems
   }]
 });
 
@@ -68,9 +98,30 @@ function loadMovie(data) {
 mainMenu.show();
 splashWindow.hide();
 
-// Add actions for main menu items
+// Add actions for 'main menu' menu items
 mainMenu.on('select', function(e) {
-  //'Box Office' movies selected
+  //'Movie Lists' selected
+  if (e.itemIndex == 0) {   
+    movieListsMenu.show();
+  }
+  //'DVD Lists' selected
+  else if (e.itemIndex == 1) {
+    dvdListsMenu.show();
+  }
+  //'About' selected
+  else if (e.itemIndex ==2) {
+     var aboutCard = new UI.Card({
+        title: "About",
+        subtitle: "",
+        body: "Uses the public RottenTomatoes API"
+     });
+     aboutCard.show();      
+  }
+});
+
+// Add actions for 'Movie Lists' menu items
+movieListsMenu.on('select', function(e) {
+  //'Box Office' selected
   if (e.itemIndex == 0) {
     // Make request to api.rottentomatoes.com for Box Office movies
     ajax(
@@ -121,7 +172,8 @@ mainMenu.on('select', function(e) {
       }
     );
   }
-else if (e.itemIndex == 1) {
+  //'In Theaters' selected
+  else if (e.itemIndex == 1) {
     // Make request to api.rottentomatoes.com for In Theaters movies
     ajax(
       {
@@ -149,7 +201,7 @@ else if (e.itemIndex == 1) {
         });
         inTheatersMenu.show();  
         
-        // Add action for selected 'Opening' movie
+        // Add action for selected 'In Theaters' movie
         inTheatersMenu.on('select', function(e) {
             ajax(
             {
@@ -170,6 +222,7 @@ else if (e.itemIndex == 1) {
       }
     );
   }
+  //'Opening Movies' selected
   else if (e.itemIndex == 2) {
     // Make request to api.rottentomatoes.com for Opening movies
     ajax(
@@ -219,7 +272,8 @@ else if (e.itemIndex == 1) {
       }
     );
   }
- else if (e.itemIndex == 3) {
+  //'Upcoming Movies' selected
+  else if (e.itemIndex == 3) {
     // Make request to api.rottentomatoes.com for Upcoming movies
     ajax(
       {
@@ -239,7 +293,7 @@ else if (e.itemIndex == 1) {
           });
         }
         
-        // Construct upcoming movie menu to show to user
+        // Construct upcoming movie menu 
         var upcomingMovieMenu = new UI.Menu({
           sections: [{
             title: 'Upcoming Movies',
@@ -271,3 +325,150 @@ else if (e.itemIndex == 1) {
   }
 });
 
+// Add actions for 'DVD Lists' menu items
+dvdListsMenu.on('select', function(e) {
+  //'Top Rentals' selected
+  if (e.itemIndex == 0) {  
+     ajax(
+     {
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?limit=20&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        type:'json'
+     },
+     function(data) {
+        var topRentalsItems = [];
+        for(var i = 0; i < 20; i++) {
+          var title = data.movies[i].title;
+          var id = data.movies[i].id;
+          topRentalsItems.push({
+            title: title,
+            subtitle: id,
+          });          
+        }
+       
+        // Construct top rentals menu 
+        var topRentalsMenu = new UI.Menu({
+          sections: [{
+            title: 'Top Rentals',
+            items: topRentalsItems
+          }]
+        });
+        topRentalsMenu.show();
+       
+        // Add action for selected 'Top Rental' dvd
+        topRentalsMenu.on('select', function(e) {
+            ajax(
+            {
+              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+              type:'json'
+            },
+            function(data) {
+              loadMovie(data);
+            },
+            function(error) {
+              console.log('Error: ' + error);
+            }
+          );
+        });
+     },
+     function(error) {
+        console.log('Error: ' + error);
+     }
+    );     
+  }
+  //'Current Release DVDs' selected
+  else if (e.itemIndex == 1) {
+     ajax(
+     {
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/current_releases.json?page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        type:'json'
+     },
+     function(data) {
+        var currentReleaseItems = [];
+        for(var i = 0; i < 20; i++) {
+          var title = data.movies[i].title;
+          var id = data.movies[i].id;
+          currentReleaseItems.push({
+            title: title,
+            subtitle: id,
+          });          
+        }
+       
+        // Construct current release menu 
+        var currentReleaseMenu = new UI.Menu({
+          sections: [{
+            title: 'Current Release DVDs',
+            items: currentReleaseItems
+          }]
+        });
+        currentReleaseMenu.show();
+       
+        // Add action for selected 'Current Release DVDs' dvd
+        currentReleaseMenu.on('select', function(e) {
+            ajax(
+            {
+              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+              type:'json'
+            },
+            function(data) {
+              loadMovie(data);
+            },
+            function(error) {
+              console.log('Error: ' + error);
+            }
+          );
+        });
+     },
+     function(error) {
+        console.log('Error: ' + error);
+     }
+    );         
+  }
+  //'New Release DVDs' selected
+  else if (e.itemIndex == 2) {
+     ajax(
+     {
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/new_releases.json?page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        type:'json'
+     },
+     function(data) {
+        var newReleaseItems = [];
+        for(var i = 0; i < 20; i++) {
+          var title = data.movies[i].title;
+          var id = data.movies[i].id;
+          newReleaseItems.push({
+            title: title,
+            subtitle: id,
+          });          
+        }
+       
+        // Construct current release menu 
+        var newReleaseMenu = new UI.Menu({
+          sections: [{
+            title: 'New Release DVDs',
+            items: newReleaseItems
+          }]
+        });
+        newReleaseMenu.show();
+       
+        // Add action for selected 'Current Release DVDs' dvd
+        newReleaseMenu.on('select', function(e) {
+            ajax(
+            {
+              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+              type:'json'
+            },
+            function(data) {
+              loadMovie(data);
+            },
+            function(error) {
+              console.log('Error: ' + error);
+            }
+          );
+        });
+     },
+     function(error) {
+        console.log('Error: ' + error);
+     }
+    );             
+  }
+});
