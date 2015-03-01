@@ -67,6 +67,22 @@ var dvdListsMenu = new UI.Menu({
   }]
 });
 
+ // Create an array of selected movie's menu items
+var movieMenuItems = [
+  {title: "Movie Info", subtitle: ""}, 
+  {title: "Cast Info", subtitle: ""}, 
+  {title: "Reviews", subtitle: ""}, 
+  {title: "Similar Movies", subtitle: ""}
+];
+
+// Construct movie menu 
+  var movieMenu = new UI.Menu({
+     sections: [{
+          title: "",
+          items: movieMenuItems
+     }]
+});
+
 function loadMovie(data) {
   var title = data.title;
   var year = data.year;
@@ -152,20 +168,12 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Box Office' movie
         boxOfficeMenu.on('select', function(e) {  
-              // Create an array of selected movie's menu items
-              var movieMenuItems = [
-                {title: "Movie Info", subtitle: e.item.subtitle}, 
-                {title: "Cast Info", subtitle: e.item.subtitle}, 
-                {title: "Reviews", subtitle: e.item.subtitle}, 
-                {title: "Similar Movies", subtitle: e.item.subtitle}
-              ];
-             // Construct movie menu 
-             var movieMenu = new UI.Menu({
-                sections: [{
-                title: e.item.title,
-                items: movieMenuItems
-                }]
-             });
+             movieMenuItems[0].subtitle = e.item.subtitle;
+             movieMenuItems[1].subtitle = e.item.subtitle;
+             movieMenuItems[2].subtitle = e.item.subtitle;
+             movieMenuItems[3].subtitle = e.item.subtitle;
+          
+             movieMenu.title = e.item.title;
              movieMenu.show();    
              
              movieMenu.on('select', function(e) {  
@@ -224,20 +232,12 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'In Theaters' movie
         inTheatersMenu.on('select', function(e) {
-              // Create an array of selected movie's menu items
-              var movieMenuItems = [
-                {title: "Movie Info", subtitle: e.item.subtitle}, 
-                {title: "Cast Info", subtitle: e.item.subtitle}, 
-                {title: "Reviews", subtitle: e.item.subtitle}, 
-                {title: "Similar Movies", subtitle: e.item.subtitle}
-              ];
-             // Construct movie menu 
-             var movieMenu = new UI.Menu({
-                sections: [{
-                title: e.item.title,
-                items: movieMenuItems
-                }]
-             });
+             movieMenuItems[0].subtitle = e.item.subtitle;
+             movieMenuItems[1].subtitle = e.item.subtitle;
+             movieMenuItems[2].subtitle = e.item.subtitle;
+             movieMenuItems[3].subtitle = e.item.subtitle;
+          
+             movieMenu.title = e.item.title;
              movieMenu.show();    
              
              movieMenu.on('select', function(e) {  
@@ -296,22 +296,14 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Opening' movie
         openingMovieMenu.on('select', function(e) {
-              // Create an array of selected movie's menu items
-              var movieMenuItems = [
-                {title: "Movie Info", subtitle: e.item.subtitle}, 
-                {title: "Cast Info", subtitle: e.item.subtitle}, 
-                {title: "Reviews", subtitle: e.item.subtitle}, 
-                {title: "Similar Movies", subtitle: e.item.subtitle}
-              ];
-             // Construct movie menu 
-             var movieMenu = new UI.Menu({
-                sections: [{
-                title: e.item.title,
-                items: movieMenuItems
-                }]
-             });
-             movieMenu.show();    
-             
+             movieMenuItems[0].subtitle = e.item.subtitle;
+             movieMenuItems[1].subtitle = e.item.subtitle;
+             movieMenuItems[2].subtitle = e.item.subtitle;
+             movieMenuItems[3].subtitle = e.item.subtitle;
+          
+             movieMenu.title = e.item.title;
+             movieMenu.show();  
+          
              movieMenu.on('select', function(e) {  
                 //'Movie Info' selected
                 if(e.itemIndex == 0) {
@@ -369,20 +361,12 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Upcoming' movie
         upcomingMovieMenu.on('select', function(e) {
-              // Create an array of selected movie's menu items
-              var movieMenuItems = [
-                {title: "Movie Info", subtitle: e.item.subtitle}, 
-                {title: "Cast Info", subtitle: e.item.subtitle}, 
-                {title: "Reviews", subtitle: e.item.subtitle}, 
-                {title: "Similar Movies", subtitle: e.item.subtitle}
-              ];
-             // Construct movie menu 
-             var movieMenu = new UI.Menu({
-                sections: [{
-                title: e.item.title,
-                items: movieMenuItems
-                }]
-             });
+             movieMenuItems[0].subtitle = e.item.subtitle;
+             movieMenuItems[1].subtitle = e.item.subtitle;
+             movieMenuItems[2].subtitle = e.item.subtitle;
+             movieMenuItems[3].subtitle = e.item.subtitle;
+          
+             movieMenu.title = e.item.title;
              movieMenu.show();    
              
              movieMenu.on('select', function(e) {  
@@ -443,21 +427,13 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Top Rental' dvd
         topRentalsMenu.on('select', function(e) {
-              // Create an array of selected movie's menu items
-              var movieMenuItems = [
-                {title: "Movie Info", subtitle: e.item.subtitle}, 
-                {title: "Cast Info", subtitle: e.item.subtitle}, 
-                {title: "Reviews", subtitle: e.item.subtitle}, 
-                {title: "Similar Movies", subtitle: e.item.subtitle}
-              ];
-             // Construct movie menu 
-             var movieMenu = new UI.Menu({
-                sections: [{
-                title: e.item.title,
-                items: movieMenuItems
-                }]
-             });
-             movieMenu.show();    
+             movieMenuItems[0].subtitle = e.item.subtitle;
+             movieMenuItems[1].subtitle = e.item.subtitle;
+             movieMenuItems[2].subtitle = e.item.subtitle;
+             movieMenuItems[3].subtitle = e.item.subtitle;
+          
+             movieMenu.title = e.item.title;
+             movieMenu.show();  
              
              movieMenu.on('select', function(e) {  
                 //'Movie Info' selected
@@ -513,21 +489,13 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Current Release DVDs' dvd
         currentReleaseMenu.on('select', function(e) {
-              // Create an array of selected movie's menu items
-              var movieMenuItems = [
-                {title: "Movie Info", subtitle: e.item.subtitle}, 
-                {title: "Cast Info", subtitle: e.item.subtitle}, 
-                {title: "Reviews", subtitle: e.item.subtitle}, 
-                {title: "Similar Movies", subtitle: e.item.subtitle}
-              ];
-             // Construct movie menu 
-             var movieMenu = new UI.Menu({
-                sections: [{
-                title: e.item.title,
-                items: movieMenuItems
-                }]
-             });
-             movieMenu.show();    
+             movieMenuItems[0].subtitle = e.item.subtitle;
+             movieMenuItems[1].subtitle = e.item.subtitle;
+             movieMenuItems[2].subtitle = e.item.subtitle;
+             movieMenuItems[3].subtitle = e.item.subtitle;
+          
+             movieMenu.title = e.item.title;
+             movieMenu.show();     
              
              movieMenu.on('select', function(e) {  
                 //'Movie Info' selected
@@ -583,21 +551,13 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Current Release DVDs' dvd
         newReleaseMenu.on('select', function(e) {
-              // Create an array of selected movie's menu items
-              var movieMenuItems = [
-                {title: "Movie Info", subtitle: e.item.subtitle}, 
-                {title: "Cast Info", subtitle: e.item.subtitle}, 
-                {title: "Reviews", subtitle: e.item.subtitle}, 
-                {title: "Similar Movies", subtitle: e.item.subtitle}
-              ];
-             // Construct movie menu 
-             var movieMenu = new UI.Menu({
-                sections: [{
-                title: e.item.title,
-                items: movieMenuItems
-                }]
-             });
-             movieMenu.show();    
+             movieMenuItems[0].subtitle = e.item.subtitle;
+             movieMenuItems[1].subtitle = e.item.subtitle;
+             movieMenuItems[2].subtitle = e.item.subtitle;
+             movieMenuItems[3].subtitle = e.item.subtitle;
+          
+             movieMenu.title = e.item.title;
+             movieMenu.show();   
              
              movieMenu.on('select', function(e) {  
                 //'Movie Info' selected
