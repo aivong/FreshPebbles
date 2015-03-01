@@ -67,6 +67,14 @@ var dvdListsMenu = new UI.Menu({
   }]
 });
 
+// Create an array of selected movie's menu items
+var movieMenuItems = [
+  {title: "Movie Info", subtitle: ""}, 
+  {title: "Cast Info", subtitle: ""}, 
+  {title: "Reviews", subtitle: ""}, 
+  {title: "Similar Movies", subtitle: ""}
+];
+
 function loadMovie(data) {
   var title = data.title;
   var year = data.year;
@@ -151,21 +159,30 @@ movieListsMenu.on('select', function(e) {
         boxOfficeMenu.show();  
         
         // Add action for selected 'Box Office' movie
-        boxOfficeMenu.on('select', function(e) {
-            // Make request to api.rottentomatoes.com for selected movie
-            ajax(
-            {
-              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-              type:'json'
-            },
-            function(data) {
-              loadMovie(data);
-            },
-            function(error) {
-              console.log('Error: ' + error);
-            }
-          );
-        });
+        boxOfficeMenu.on('select', function(e) {                    
+             // Construct movie menu 
+             var movieMenu = new UI.Menu({
+                sections: [{
+                title: e.item.title,
+                items: movieMenuItems
+                }]
+             });
+             movieMenu.show();    
+          
+//             // Make request to api.rottentomatoes.com for selected movie
+//             ajax(
+//             {
+//               url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+//               type:'json'
+//             },
+//             function(data) {
+//               loadMovie(data);
+//             },
+//             function(error) {
+//               console.log('Error: ' + error);
+//             }
+//           );
+      }); 
       },
       function(error) {
         console.log('Error: ' + error);
