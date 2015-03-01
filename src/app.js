@@ -24,6 +24,7 @@ splashWindow.show();
 // Create an array of Menu items
 var mainMenuItems = [
   {title: "Box Office", subtitle: ""}, 
+  {title: "In Theaters", subtitle: ""}, 
   {title: "Opening Movies", subtitle: ""}, 
   {title: "Upcoming Movies", subtitle: ""}
 ];
@@ -31,7 +32,7 @@ var mainMenuItems = [
 // Construct main menu to show to user
 var mainMenu = new UI.Menu({
   sections: [{
-    title: 'Fresh Pebbles',
+    title: 'FreshPebbles',
     items: mainMenuItems
   }]
 });
@@ -54,10 +55,11 @@ function loadMovie(data) {
      content += "\n" + synopsis;
      // Create detail Card for a selected movie 
      var movieCard = new UI.Card({
-        title: title,
-        subtitle: year,
+        title: title + " (" + year + ")",
+        subtitle: "",
         body: content,
-        scrollable: true
+        scrollable: true,
+        style: "small"
      });
      movieCard.show();    
 }
@@ -119,7 +121,56 @@ mainMenu.on('select', function(e) {
       }
     );
   }
-  else if (e.itemIndex == 1) {
+else if (e.itemIndex == 1) {
+    // Make request to api.rottentomatoes.com for In Theaters movies
+    ajax(
+      {
+        url:'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?page_limit=20&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+        type:'json'
+      },
+      function(data) {
+        var inTheatersItems = [];
+        //fill In Theaters Movies list
+        for(var i = 0; i < 20; i++) {
+          var title = data.movies[i].title;
+          var id = data.movies[i].id;
+          inTheatersItems.push({
+            title: title,
+            subtitle: id,
+          });
+        }
+        
+        // Construct opening movie menu to show to user
+        var inTheatersMenu = new UI.Menu({
+          sections: [{
+            title: 'In Theaters',
+            items: inTheatersItems
+          }]
+        });
+        inTheatersMenu.show();  
+        
+        // Add action for selected 'Opening' movie
+        inTheatersMenu.on('select', function(e) {
+            ajax(
+            {
+              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+              type:'json'
+            },
+            function(data) {
+              loadMovie(data);
+            },
+            function(error) {
+              console.log('Error: ' + error);
+            }
+          );
+        });
+      },
+      function(error) {
+        console.log('Error: ' + error);
+      }
+    );
+  }
+  else if (e.itemIndex == 2) {
     // Make request to api.rottentomatoes.com for Opening movies
     ajax(
       {
@@ -168,7 +219,7 @@ mainMenu.on('select', function(e) {
       }
     );
   }
- else if (e.itemIndex == 2) {
+ else if (e.itemIndex == 3) {
     // Make request to api.rottentomatoes.com for Upcoming movies
     ajax(
       {
@@ -179,7 +230,7 @@ mainMenu.on('select', function(e) {
         var total = data.total;
         var upcomingMovieItems = [];
         //fill Upcoming Movies list
-        for(var i = 0; i < data.total; i++) {
+        for(var i = 0; i < total; i++) {
           var title = data.movies[i].title;
           var id = data.movies[i].id;
           upcomingMovieItems.push({
