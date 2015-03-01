@@ -177,9 +177,9 @@ movieListsMenu.on('select', function(e) {
              movieMenu.show();    
              
              movieMenu.on('select', function(e) {  
-                //'Movie Info' selected
-                if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie
+                 //'Movie Info' selected
+                 if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie's info
                    ajax(
                    {
                      url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
@@ -192,6 +192,38 @@ movieListsMenu.on('select', function(e) {
                      console.log('Error: ' + error);
                    }
                   ); 
+                }
+                //'Cast Info' selected
+                if(e.itemIndex == 1) {
+                  console.log(""+e.item.title);
+                  console.log(""+e.item.subtitle);
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                         var content = "";
+                         var total = 5;
+                         for(var i = 0; i < total; i++) {
+                            content += data.cast[i].name;
+                            content += " as ";
+                            content += data.cast[i].characters[0] + ",\n";
+                         }  
+                         var castCard = new UI.Card({
+                            title: e.item.title,
+                            subtitle: "",
+                            body: content,
+                            scrollable: true,
+                            style: "small"
+                         });
+                         castCard.show(); 
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
                }
             });
       }); 
@@ -557,7 +589,7 @@ dvdListsMenu.on('select', function(e) {
              movieMenuItems[3].subtitle = e.item.subtitle;
           
              movieMenu.title = e.item.title;
-             movieMenu.show();   
+             movieMenu.show();       
              
              movieMenu.on('select', function(e) {  
                 //'Movie Info' selected
