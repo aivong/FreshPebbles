@@ -211,8 +211,16 @@ function selectReviews(id) {
                           type:'json'
                       },
                       function(data) {
-                         var freshPercentage = parseInt(getFreshPercentage(data)) + "%"; 
-                         var rottenPercentage = parseInt(getRottenPercentage(data)) + "%"; 
+                         var freshPercentage = getFreshPercentage(data); 
+                         var rottenPercentage = getRottenPercentage(data);
+                         if(freshPercentage != "NA") {
+                           freshPercentage = parseInt(freshPercentage);
+                           freshPercentage += "%";
+                         }
+                        if(rottenPercentage != "NA") {
+                           rottenPercentage = parseInt(rottenPercentage);
+                           rottenPercentage += "%";
+                        }
                          var reviewsMenuItems = [
                            {title: "Fresh: " + freshPercentage, subtitle: "", id: ""}, 
                            {title: "Rotten: " + rottenPercentage, subtitle: "", id: ""}, 
