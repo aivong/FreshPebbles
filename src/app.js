@@ -71,8 +71,7 @@ var dvdListsMenu = new UI.Menu({
 var movieMenuItems = [
   {title: "Movie Info", subtitle: "", id: ""}, 
   {title: "Cast Info", subtitle: "", id: ""}, 
-  {title: "Reviews", subtitle: "", id: ""}, 
-  {title: "Similar Movies", subtitle: "", id: ""}
+  {title: "Reviews", subtitle: "", id: ""}
 ];
 
 // Construct movie menu 
@@ -82,110 +81,6 @@ var movieMenuItems = [
           items: movieMenuItems
      }]
 });
-
-function loadMovie(data) {
-  var title = data.title;
-  var year = data.year;
-  var synopsis = data.synopsis;
-  var criticScore = data.ratings.critics_score;
-  var audienceScore = data.ratings.audience_score;
-  if(criticScore == -1) {
-     criticScore = "NA";   //Not yet rated by critics
-  }
-  if(audienceScore == -1) {
-     audienceScore = "NA"; //Not yet rated by audiences
-  }
-  var content = "Critic Score: " + criticScore; 
-     content += "\nAudience Score: ";
-     content += audienceScore;
-     content += "\n" + synopsis;
-     // Create detail Card for a selected movie 
-     var movieCard = new UI.Card({
-        title: title + " (" + year + ")",
-        subtitle: "",
-        body: content,
-        scrollable: true,
-        style: "small"
-     });
-     movieCard.show();    
-}
-
-function loadCast(data) {
-     var content = "";
-     for(var i = 0; i < 9; i++) {
-          content += data.cast[i].name;
-          content += " as ";
-          if(typeof data.cast[i].characters[0] == 'undefined') {
-            content += "Unknown,\n";
-          }
-          else {
-            content += data.cast[i].characters[0] + ",\n";
-          }
-     }  
-     //Formatting for the last item
-     content += data.cast[9].name;
-     content += " as ";
-     if(typeof data.cast[9].characters[0] == 'undefined') {
-         content += "Unknown,\n";
-     }
-     else {
-         content += data.cast[9].characters[0];
-     }
-     //Construct Cast Card
-     var castCard = new UI.Card({
-          title: "Cast Info",
-          subtitle: "",
-          body: content,
-          scrollable: true,
-          style: "small"
-     });
-     castCard.show();   
-}
-
-function loadFreshReviews(data) {
-    var content = "";
-    for(var i = 0; i < data.reviews.length; i++) {
-        if(data.reviews[i].freshness == "fresh") {
-           if(data.reviews[i].original_score) {
-           //add original_score rating only if it exists
-           content += "\"" +  data.reviews[i].original_score + "\" \n";
-           }
-           content += data.reviews[i].quote + " -" + data.reviews[i].critic +  "\n\n";
-        }
-    }   
-    //Construct Fresh Reviews Card
-    var freshReviewsCard = new UI.Card({
-      title: "Fresh Reviews",
-      subtitle: "",
-      body: content,
-      scrollable: true,
-      style: "small"
-    });
-    freshReviewsCard.show();   
-}
-
-function loadRottenReviews(data) {
-    var content = "";
-    for(var i = 0; i < data.reviews.length; i++) {
-        if(data.reviews[i].freshness == "rotten") {
-           if(data.reviews[i].original_score) {
-           //add original_score rating only if it exists
-           content += "\"" +  data.reviews[i].original_score + "\" \n";
-           }
-           content += data.reviews[i].quote + " -" + data.reviews[i].critic +  "\n\n";
-        }
-    }   
-    console.log(content);
-    //Construct Rotten Reviews Card
-    var rottenReviewsCard = new UI.Card({
-      title: "Rotten Reviews",
-      subtitle: "",
-      body: content,
-      scrollable: true,
-      style: "small"
-    });
-    rottenReviewsCard.show();   
-}
 
 function getFreshPercentage(data) {
     var freshCount = 0;
@@ -223,6 +118,170 @@ function getRottenPercentage(data) {
         rottenPercentage = "NA";
     }  
     return rottenPercentage;
+}
+
+function selectMovieInfo(id) {
+                   // Make request to api.rottentomatoes.com for selected movie's info
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                      var title = data.title;
+                      var year = data.year;
+                      var synopsis = data.synopsis;
+                      var criticScore = data.ratings.critics_score;
+                      var audienceScore = data.ratings.audience_score;
+                      if(criticScore == -1) {
+                         criticScore = "NA";   //Not yet rated by critics
+                      }
+                      if(audienceScore == -1) {
+                         audienceScore = "NA"; //Not yet rated by audiences
+                      }
+                      var content = "Critic Score: " + criticScore; 
+                         content += "\nAudience Score: ";
+                         content += audienceScore;
+                         content += "\n\n" + synopsis;
+                         // Create detail Card for a selected movie 
+                         var movieCard = new UI.Card({
+                            title: title + " (" + year + ")",
+                            subtitle: "",
+                            body: content,
+                            scrollable: true,
+                            style: "small"
+                         });
+                         movieCard.show();   
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+}
+
+function selectCastInfo(id) {
+                    // Make request to api.rottentomatoes.com for selected movie's cast info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                         var content = "";
+                         for(var i = 0; i < 9; i++) {
+                              content += data.cast[i].name;
+                              content += " as ";
+                              if(typeof data.cast[i].characters[0] == 'undefined') {
+                                content += "Unknown,\n";
+                              }
+                              else {
+                                content += data.cast[i].characters[0] + ",\n";
+                              }
+                         }  
+                         //Formatting for the last item
+                         content += data.cast[9].name;
+                         content += " as ";
+                         if(typeof data.cast[9].characters[0] == 'undefined') {
+                             content += "Unknown,\n";
+                         }
+                         else {
+                             content += data.cast[9].characters[0];
+                         }
+                         //Construct Cast Card
+                         var castCard = new UI.Card({
+                              title: "Cast Info",
+                              subtitle: "",
+                              body: content,
+                              scrollable: true,
+                              style: "small"
+                         });
+                         castCard.show(); 
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
+}
+
+function selectReviews(id) {
+// Make request to api.rottentomatoes.com for selected movie's review info
+                    ajax(
+                      {
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + id + '/reviews.json?review_type=all&page_limit=50&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          type:'json'
+                      },
+                      function(data) {
+                         var freshPercentage = parseInt(getFreshPercentage(data)) + "%"; 
+                         var rottenPercentage = parseInt(getRottenPercentage(data)) + "%"; 
+                         var reviewsMenuItems = [
+                           {title: "Fresh: " + freshPercentage, subtitle: "", id: ""}, 
+                           {title: "Rotten: " + rottenPercentage, subtitle: "", id: ""}, 
+                          ];
+                           
+                          // Construct reviews menu 
+                          var reviewsMenu = new UI.Menu({
+                               sections: [{
+                                    title: "Total",
+                                    items: reviewsMenuItems
+                               }]
+                          });
+                          reviewsMenu.show();
+                 
+                          reviewsMenu.on('select', function(e) {
+                              var content = "";
+                              var len = 10;
+                              if(len > data.reviews.length) {
+                                len = data.reviews.length;
+                              }
+                              //'Fresh' reviews selected
+                              if(e.itemIndex == 0) {
+                                 for(var i = 0; i < len; i++) {
+                                      if(data.reviews[i].freshness == "fresh") {
+                                         if(data.reviews[i].original_score) {
+                                         //add original_score rating only if it exists
+                                         content += "\"" +  data.reviews[i].original_score + "\" \n";
+                                         }
+                                         content += data.reviews[i].quote + " -" + data.reviews[i].critic +  "\n\n";
+                                      }
+                                  }   
+                                  //Construct Fresh Reviews Card
+                                  var freshReviewsCard = new UI.Card({
+                                    title: "Most Recent Fresh Reviews",
+                                    subtitle: "",
+                                    body: content,
+                                    scrollable: true,
+                                    style: "small"
+                                  });
+                                  freshReviewsCard.show();   
+                              }
+                              //'Rotten' reviews selected
+                              else if(e.itemIndex == 1) {
+                                  for(var i = 0; i < len; i++) {
+                                      if(data.reviews[i].freshness == "rotten") {
+                                         if(data.reviews[i].original_score) {
+                                         //add original_score rating only if it exists
+                                         content += "\"" +  data.reviews[i].original_score + "\" \n";
+                                         }
+                                         content += data.reviews[i].quote + " -" + data.reviews[i].critic +  "\n\n";
+                                      }
+                                  }   
+                                  console.log(content);
+                                  //Construct Rotten Reviews Card
+                                  var rottenReviewsCard = new UI.Card({
+                                    title: "Most Recent Rotten Reviews",
+                                    subtitle: "",
+                                    body: content,
+                                    scrollable: true,
+                                    style: "small"
+                                  });
+                                  rottenReviewsCard.show();   
+                              }
+                          });
+                      },
+                      function(error) {
+                         console.log('Error: ' + error);
+                      }
+                    ); 
 }
 
 // Show the Menu, hide the splash
@@ -287,85 +346,23 @@ movieListsMenu.on('select', function(e) {
              movieMenuItems[0].id = e.item.id;
              movieMenuItems[1].id = e.item.id;
              movieMenuItems[2].id = e.item.id;
-             movieMenuItems[3].id = e.item.id;
              
              movieMenu.show();    
              
-             movieMenu.on('select', function(e) {  
+             movieMenu.on('select', function(e) {
                  //'Movie Info' selected
-                 if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie's info
-                   ajax(
-                   {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                     type:'json'
-                   },
-                   function(data) {
-                     loadMovie(data);
-                   },
-                   function(error) {
-                     console.log('Error: ' + error);
-                   }
-                  ); 
-                }
-                //'Cast Info' selected
-                else if(e.itemIndex == 1) {
-                    // Make request to api.rottentomatoes.com for selected movie's cast info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                         loadCast(data);
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-               //'Reviews' selected
-               else if(e.itemIndex == 2) {
-                  // Make request to api.rottentomatoes.com for selected movie's review info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/reviews.json?review_type=all&page_limit=50&page=1&country=us&apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                         var freshPercentage = getFreshPercentage(data); 
-                         var rottenPercentage = getRottenPercentage(data); 
-                         var reviewsMenuItems = [
-                          {title: "Fresh " + freshPercentage, subtitle: "", id: ""}, 
-                          {title: "Rotten " + rottenPercentage, subtitle: "", id: ""}, 
-                          ];
-                           
-                          // Construct reviews menu 
-                          var reviewsMenu = new UI.Menu({
-                               sections: [{
-                                    title: "",
-                                    items: reviewsMenuItems
-                               }]
-                          });
-                          reviewsMenu.show();
-                 
-                          reviewsMenu.on('select', function(e) {  
-                              //'Fresh' reviews selected
-                              if(e.itemIndex == 0) {
-                                  loadFreshReviews(data);
-                              }
-                              //'Rotten' reviews selected
-                              else if(e.itemIndex == 1) {
-                                  loadRottenReviews(data);
-                              }
-                          });
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-            });
+                 if(e.itemIndex == 0) {     
+                   selectMovieInfo(e.item.id);
+                 }
+                 //'Cast Info' selected
+                 else if(e.itemIndex == 1) {
+                   selectCastInfo(e.item.id);
+                 }
+                 //'Reviews' selected
+                 else if(e.itemIndex == 2) {
+                   selectReviews(e.item.id);
+                 }
+             });
       }); 
       },
       function(error) {
@@ -408,44 +405,23 @@ movieListsMenu.on('select', function(e) {
              movieMenuItems[0].id = e.item.id;
              movieMenuItems[1].id = e.item.id;
              movieMenuItems[2].id = e.item.id;
-             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.show();    
-             
-             movieMenu.on('select', function(e) {  
-                //'Movie Info' selected
-                if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie
-                   ajax(
-                   {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                     type:'json'
-                   },
-                   function(data) {
-                     loadMovie(data);
-                   },
-                   function(error) {
-                     console.log('Error: ' + error);
-                   }
-                  ); 
-               }
-                //'Cast Info' selected
-                else if(e.itemIndex == 1) {
-                    // Make request to api.rottentomatoes.com for selected movie's cast info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                          loadCast(data);
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-            });
+             movieMenu.show();  
+          
+             movieMenu.on('select', function(e) {
+                 //'Movie Info' selected
+                 if(e.itemIndex == 0) {     
+                   selectMovieInfo(e.item.id);
+                 }
+                 //'Cast Info' selected
+                 else if(e.itemIndex == 1) {
+                   selectCastInfo(e.item.id);
+                 }
+                 //'Reviews' selected
+                 else if(e.itemIndex == 2) {
+                   selectReviews(e.item.id);
+                 }
+             });
         });
       },
       function(error) {
@@ -488,44 +464,23 @@ movieListsMenu.on('select', function(e) {
              movieMenuItems[0].id = e.item.id;
              movieMenuItems[1].id = e.item.id;
              movieMenuItems[2].id = e.item.id;
-             movieMenuItems[3].id = e.item.id;
           
              movieMenu.show();  
           
-             movieMenu.on('select', function(e) {  
-                //'Movie Info' selected
-                if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie
-                   ajax(
-                   {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                     type:'json'
-                   },
-                   function(data) {
-                     loadMovie(data);
-                   },
-                   function(error) {
-                     console.log('Error: ' + error);
-                   }
-                  ); 
-               }
-                //'Cast Info' selected
-                else if(e.itemIndex == 1) {
-                    // Make request to api.rottentomatoes.com for selected movie's cast info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                          loadCast(data);
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-            });
+             movieMenu.on('select', function(e) {
+                 //'Movie Info' selected
+                 if(e.itemIndex == 0) {     
+                   selectMovieInfo(e.item.id);
+                 }
+                 //'Cast Info' selected
+                 else if(e.itemIndex == 1) {
+                   selectCastInfo(e.item.id);
+                 }
+                 //'Reviews' selected
+                 else if(e.itemIndex == 2) {
+                   selectReviews(e.item.id);
+                 }
+             });
         });
       },
       function(error) {
@@ -568,44 +523,22 @@ movieListsMenu.on('select', function(e) {
              movieMenuItems[0].id = e.item.id;
              movieMenuItems[1].id = e.item.id;
              movieMenuItems[2].id = e.item.id;
-             movieMenuItems[3].id = e.item.id;
-          
-             movieMenu.show();    
-             
-             movieMenu.on('select', function(e) {  
-                //'Movie Info' selected
-                if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie
-                   ajax(
-                   {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                     type:'json'
-                   },
-                   function(data) {
-                     loadMovie(data);
-                   },
-                   function(error) {
-                     console.log('Error: ' + error);
-                   }
-                  ); 
-               }
-                //'Cast Info' selected
-                else if(e.itemIndex == 1) {
-                    // Make request to api.rottentomatoes.com for selected movie's cast info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                          loadCast(data);
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-            });
+
+             movieMenu.show(); 
+             movieMenu.on('select', function(e) {
+                 //'Movie Info' selected
+                 if(e.itemIndex == 0) {     
+                   selectMovieInfo(e.item.id);
+                 }
+                 //'Cast Info' selected
+                 else if(e.itemIndex == 1) {
+                   selectCastInfo(e.item.id);
+                 }
+                 //'Reviews' selected
+                 else if(e.itemIndex == 2) {
+                   selectReviews(e.item.id);
+                 }
+             });
         });
       },
       function(error) {
@@ -650,44 +583,23 @@ dvdListsMenu.on('select', function(e) {
              movieMenuItems[0].id = e.item.id;
              movieMenuItems[1].id = e.item.id;
              movieMenuItems[2].id = e.item.id;
-             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.show();  
-             
-             movieMenu.on('select', function(e) {  
-                //'Movie Info' selected
-                if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie
-                   ajax(
-                   {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                     type:'json'
-                   },
-                   function(data) {
-                     loadMovie(data);
-                   },
-                   function(error) {
-                     console.log('Error: ' + error);
-                   }
-                  ); 
-               }
-                //'Cast Info' selected
-                else if(e.itemIndex == 1) {
-                    // Make request to api.rottentomatoes.com for selected movie's cast info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                        loadCast(data);
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-            });
+             movieMenu.show(); 
+          
+             movieMenu.on('select', function(e) {
+                 //'Movie Info' selected
+                 if(e.itemIndex == 0) {     
+                   selectMovieInfo(e.item.id);
+                 }
+                 //'Cast Info' selected
+                 else if(e.itemIndex == 1) {
+                   selectCastInfo(e.item.id);
+                 }
+                 //'Reviews' selected
+                 else if(e.itemIndex == 2) {
+                   selectReviews(e.item.id);
+                 }
+             });
         });
      },
      function(error) {
@@ -728,44 +640,23 @@ dvdListsMenu.on('select', function(e) {
              movieMenuItems[0].id = e.item.id;
              movieMenuItems[1].id = e.item.id;
              movieMenuItems[2].id = e.item.id;
-             movieMenuItems[3].id = e.item.id;
 
-             movieMenu.show();     
-             
-             movieMenu.on('select', function(e) {  
-                //'Movie Info' selected
-                if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie
-                   ajax(
-                   {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                     type:'json'
-                   },
-                   function(data) {
-                     loadMovie(data);
-                   },
-                   function(error) {
-                     console.log('Error: ' + error);
-                   }
-                  ); 
-               }
-                //'Cast Info' selected
-                else if(e.itemIndex == 1) {
-                    // Make request to api.rottentomatoes.com for selected movie's cast info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                         loadCast(data);
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-            });
+             movieMenu.show(); 
+          
+             movieMenu.on('select', function(e) {
+                 //'Movie Info' selected
+                 if(e.itemIndex == 0) {     
+                   selectMovieInfo(e.item.id);
+                 }
+                 //'Cast Info' selected
+                 else if(e.itemIndex == 1) {
+                   selectCastInfo(e.item.id);
+                 }
+                 //'Reviews' selected
+                 else if(e.itemIndex == 2) {
+                   selectReviews(e.item.id);
+                 }
+             });
         });
      },
      function(error) {
@@ -806,44 +697,23 @@ dvdListsMenu.on('select', function(e) {
              movieMenuItems[0].id = e.item.id;
              movieMenuItems[1].id = e.item.id;
              movieMenuItems[2].id = e.item.id;
-             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.show();       
-             
-             movieMenu.on('select', function(e) {  
-                //'Movie Info' selected
-                if(e.itemIndex == 0) {
-                   // Make request to api.rottentomatoes.com for selected movie
-                   ajax(
-                   {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                     type:'json'
-                   },
-                   function(data) {
-                     loadMovie(data);
-                   },
-                   function(error) {
-                     console.log('Error: ' + error);
-                   }
-                  ); 
-               }
-                //'Cast Info' selected
-                else if(e.itemIndex == 1) {
-                    // Make request to api.rottentomatoes.com for selected movie's cast info
-                    ajax(
-                      {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-                          type:'json'
-                      },
-                      function(data) {
-                          loadCast(data);
-                      },
-                      function(error) {
-                         console.log('Error: ' + error);
-                      }
-                    ); 
-               }
-            });
+             movieMenu.show(); 
+          
+             movieMenu.on('select', function(e) {
+                 //'Movie Info' selected
+                 if(e.itemIndex == 0) {     
+                   selectMovieInfo(e.item.id);
+                 }
+                 //'Cast Info' selected
+                 else if(e.itemIndex == 1) {
+                   selectCastInfo(e.item.id);
+                 }
+                 //'Reviews' selected
+                 else if(e.itemIndex == 2) {
+                   selectReviews(e.item.id);
+                 }
+             });
         });
      },
      function(error) {
