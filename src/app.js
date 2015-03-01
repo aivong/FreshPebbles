@@ -67,14 +67,6 @@ var dvdListsMenu = new UI.Menu({
   }]
 });
 
-// Create an array of selected movie's menu items
-var movieMenuItems = [
-  {title: "Movie Info", subtitle: ""}, 
-  {title: "Cast Info", subtitle: ""}, 
-  {title: "Reviews", subtitle: ""}, 
-  {title: "Similar Movies", subtitle: ""}
-];
-
 function loadMovie(data) {
   var title = data.title;
   var year = data.year;
@@ -159,7 +151,14 @@ movieListsMenu.on('select', function(e) {
         boxOfficeMenu.show();  
         
         // Add action for selected 'Box Office' movie
-        boxOfficeMenu.on('select', function(e) {                    
+        boxOfficeMenu.on('select', function(e) {  
+              // Create an array of selected movie's menu items
+              var movieMenuItems = [
+                {title: "Movie Info", subtitle: e.item.subtitle}, 
+                {title: "Cast Info", subtitle: e.item.subtitle}, 
+                {title: "Reviews", subtitle: e.item.subtitle}, 
+                {title: "Similar Movies", subtitle: e.item.subtitle}
+              ];
              // Construct movie menu 
              var movieMenu = new UI.Menu({
                 sections: [{
@@ -168,20 +167,25 @@ movieListsMenu.on('select', function(e) {
                 }]
              });
              movieMenu.show();    
-          
-//             // Make request to api.rottentomatoes.com for selected movie
-//             ajax(
-//             {
-//               url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-//               type:'json'
-//             },
-//             function(data) {
-//               loadMovie(data);
-//             },
-//             function(error) {
-//               console.log('Error: ' + error);
-//             }
-//           );
+             
+             movieMenu.on('select', function(e) {  
+                //'Movie Info' selected
+                if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                     loadMovie(data);
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+               }
+            });
       }); 
       },
       function(error) {
@@ -220,18 +224,40 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'In Theaters' movie
         inTheatersMenu.on('select', function(e) {
-            ajax(
-            {
-              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-              type:'json'
-            },
-            function(data) {
-              loadMovie(data);
-            },
-            function(error) {
-              console.log('Error: ' + error);
-            }
-          );
+              // Create an array of selected movie's menu items
+              var movieMenuItems = [
+                {title: "Movie Info", subtitle: e.item.subtitle}, 
+                {title: "Cast Info", subtitle: e.item.subtitle}, 
+                {title: "Reviews", subtitle: e.item.subtitle}, 
+                {title: "Similar Movies", subtitle: e.item.subtitle}
+              ];
+             // Construct movie menu 
+             var movieMenu = new UI.Menu({
+                sections: [{
+                title: e.item.title,
+                items: movieMenuItems
+                }]
+             });
+             movieMenu.show();    
+             
+             movieMenu.on('select', function(e) {  
+                //'Movie Info' selected
+                if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                     loadMovie(data);
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+               }
+            });
         });
       },
       function(error) {
@@ -270,18 +296,40 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Opening' movie
         openingMovieMenu.on('select', function(e) {
-            ajax(
-            {
-              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-              type:'json'
-            },
-            function(data) {
-              loadMovie(data);
-            },
-            function(error) {
-              console.log('Error: ' + error);
-            }
-          );
+              // Create an array of selected movie's menu items
+              var movieMenuItems = [
+                {title: "Movie Info", subtitle: e.item.subtitle}, 
+                {title: "Cast Info", subtitle: e.item.subtitle}, 
+                {title: "Reviews", subtitle: e.item.subtitle}, 
+                {title: "Similar Movies", subtitle: e.item.subtitle}
+              ];
+             // Construct movie menu 
+             var movieMenu = new UI.Menu({
+                sections: [{
+                title: e.item.title,
+                items: movieMenuItems
+                }]
+             });
+             movieMenu.show();    
+             
+             movieMenu.on('select', function(e) {  
+                //'Movie Info' selected
+                if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                     loadMovie(data);
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+               }
+            });
         });
       },
       function(error) {
@@ -321,18 +369,40 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Upcoming' movie
         upcomingMovieMenu.on('select', function(e) {
-            ajax(
-            {
-              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-              type:'json'
-            },
-            function(data) {
-              loadMovie(data);
-            },
-            function(error) {
-              console.log('Error: ' + error);
-            }
-          );
+              // Create an array of selected movie's menu items
+              var movieMenuItems = [
+                {title: "Movie Info", subtitle: e.item.subtitle}, 
+                {title: "Cast Info", subtitle: e.item.subtitle}, 
+                {title: "Reviews", subtitle: e.item.subtitle}, 
+                {title: "Similar Movies", subtitle: e.item.subtitle}
+              ];
+             // Construct movie menu 
+             var movieMenu = new UI.Menu({
+                sections: [{
+                title: e.item.title,
+                items: movieMenuItems
+                }]
+             });
+             movieMenu.show();    
+             
+             movieMenu.on('select', function(e) {  
+                //'Movie Info' selected
+                if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                     loadMovie(data);
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+               }
+            });
         });
       },
       function(error) {
@@ -373,18 +443,40 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Top Rental' dvd
         topRentalsMenu.on('select', function(e) {
-            ajax(
-            {
-              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-              type:'json'
-            },
-            function(data) {
-              loadMovie(data);
-            },
-            function(error) {
-              console.log('Error: ' + error);
-            }
-          );
+              // Create an array of selected movie's menu items
+              var movieMenuItems = [
+                {title: "Movie Info", subtitle: e.item.subtitle}, 
+                {title: "Cast Info", subtitle: e.item.subtitle}, 
+                {title: "Reviews", subtitle: e.item.subtitle}, 
+                {title: "Similar Movies", subtitle: e.item.subtitle}
+              ];
+             // Construct movie menu 
+             var movieMenu = new UI.Menu({
+                sections: [{
+                title: e.item.title,
+                items: movieMenuItems
+                }]
+             });
+             movieMenu.show();    
+             
+             movieMenu.on('select', function(e) {  
+                //'Movie Info' selected
+                if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                     loadMovie(data);
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+               }
+            });
         });
      },
      function(error) {
@@ -421,18 +513,40 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Current Release DVDs' dvd
         currentReleaseMenu.on('select', function(e) {
-            ajax(
-            {
-              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-              type:'json'
-            },
-            function(data) {
-              loadMovie(data);
-            },
-            function(error) {
-              console.log('Error: ' + error);
-            }
-          );
+              // Create an array of selected movie's menu items
+              var movieMenuItems = [
+                {title: "Movie Info", subtitle: e.item.subtitle}, 
+                {title: "Cast Info", subtitle: e.item.subtitle}, 
+                {title: "Reviews", subtitle: e.item.subtitle}, 
+                {title: "Similar Movies", subtitle: e.item.subtitle}
+              ];
+             // Construct movie menu 
+             var movieMenu = new UI.Menu({
+                sections: [{
+                title: e.item.title,
+                items: movieMenuItems
+                }]
+             });
+             movieMenu.show();    
+             
+             movieMenu.on('select', function(e) {  
+                //'Movie Info' selected
+                if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                     loadMovie(data);
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+               }
+            });
         });
      },
      function(error) {
@@ -469,18 +583,40 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Current Release DVDs' dvd
         newReleaseMenu.on('select', function(e) {
-            ajax(
-            {
-              url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
-              type:'json'
-            },
-            function(data) {
-              loadMovie(data);
-            },
-            function(error) {
-              console.log('Error: ' + error);
-            }
-          );
+              // Create an array of selected movie's menu items
+              var movieMenuItems = [
+                {title: "Movie Info", subtitle: e.item.subtitle}, 
+                {title: "Cast Info", subtitle: e.item.subtitle}, 
+                {title: "Reviews", subtitle: e.item.subtitle}, 
+                {title: "Similar Movies", subtitle: e.item.subtitle}
+              ];
+             // Construct movie menu 
+             var movieMenu = new UI.Menu({
+                sections: [{
+                title: e.item.title,
+                items: movieMenuItems
+                }]
+             });
+             movieMenu.show();    
+             
+             movieMenu.on('select', function(e) {  
+                //'Movie Info' selected
+                if(e.itemIndex == 0) {
+                   // Make request to api.rottentomatoes.com for selected movie
+                   ajax(
+                   {
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     type:'json'
+                   },
+                   function(data) {
+                     loadMovie(data);
+                   },
+                   function(error) {
+                     console.log('Error: ' + error);
+                   }
+                  ); 
+               }
+            });
         });
      },
      function(error) {
