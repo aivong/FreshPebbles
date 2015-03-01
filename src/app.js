@@ -31,7 +31,7 @@ var mainMenuItems = [
 // Construct main menu to show to user
 var mainMenu = new UI.Menu({
   sections: [{
-    title: 'Fresh Pebbles',
+    title: 'FreshPebbles',
     items: mainMenuItems
   }]
 });
@@ -69,10 +69,10 @@ var dvdListsMenu = new UI.Menu({
 
  // Create an array of selected movie's menu items
 var movieMenuItems = [
-  {title: "Movie Info", subtitle: ""}, 
-  {title: "Cast Info", subtitle: ""}, 
-  {title: "Reviews", subtitle: ""}, 
-  {title: "Similar Movies", subtitle: ""}
+  {title: "Movie Info", subtitle: "", id: ""}, 
+  {title: "Cast Info", subtitle: "", id: ""}, 
+  {title: "Reviews", subtitle: "", id: ""}, 
+  {title: "Similar Movies", subtitle: "", id: ""}
 ];
 
 // Construct movie menu 
@@ -185,7 +185,8 @@ movieListsMenu.on('select', function(e) {
           var id = data.movies[i].id;
           boxOfficeItems.push({
             title: title,
-            subtitle: id,
+            subtitle: "",
+            id: id
           });
         }
         
@@ -200,12 +201,11 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Box Office' movie
         boxOfficeMenu.on('select', function(e) {  
-             movieMenuItems[0].subtitle = e.item.subtitle;
-             movieMenuItems[1].subtitle = e.item.subtitle;
-             movieMenuItems[2].subtitle = e.item.subtitle;
-             movieMenuItems[3].subtitle = e.item.subtitle;
-          
-             movieMenu.title = e.item.title;
+             movieMenuItems[0].id = e.item.id;
+             movieMenuItems[1].id = e.item.id;
+             movieMenuItems[2].id = e.item.id;
+             movieMenuItems[3].id = e.item.id;
+             
              movieMenu.show();    
              
              movieMenu.on('select', function(e) {  
@@ -214,7 +214,7 @@ movieListsMenu.on('select', function(e) {
                    // Make request to api.rottentomatoes.com for selected movie's info
                    ajax(
                    {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                      type:'json'
                    },
                    function(data) {
@@ -230,7 +230,7 @@ movieListsMenu.on('select', function(e) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                           type:'json'
                       },
                       function(data) {
@@ -265,7 +265,8 @@ movieListsMenu.on('select', function(e) {
           var id = data.movies[i].id;
           inTheatersItems.push({
             title: title,
-            subtitle: id,
+            subtitle: "",
+            id: id
           });
         }
         
@@ -280,12 +281,11 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'In Theaters' movie
         inTheatersMenu.on('select', function(e) {
-             movieMenuItems[0].subtitle = e.item.subtitle;
-             movieMenuItems[1].subtitle = e.item.subtitle;
-             movieMenuItems[2].subtitle = e.item.subtitle;
-             movieMenuItems[3].subtitle = e.item.subtitle;
+             movieMenuItems[0].id = e.item.id;
+             movieMenuItems[1].id = e.item.id;
+             movieMenuItems[2].id = e.item.id;
+             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.title = e.item.title;
              movieMenu.show();    
              
              movieMenu.on('select', function(e) {  
@@ -294,7 +294,7 @@ movieListsMenu.on('select', function(e) {
                    // Make request to api.rottentomatoes.com for selected movie
                    ajax(
                    {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                      type:'json'
                    },
                    function(data) {
@@ -310,7 +310,7 @@ movieListsMenu.on('select', function(e) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                           type:'json'
                       },
                       function(data) {
@@ -345,7 +345,8 @@ movieListsMenu.on('select', function(e) {
           var id = data.movies[i].id;
           openingMovieItems.push({
             title: title,
-            subtitle: id,
+            subtitle: "",
+            id: id
           });
         }
         
@@ -360,12 +361,11 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Opening' movie
         openingMovieMenu.on('select', function(e) {
-             movieMenuItems[0].subtitle = e.item.subtitle;
-             movieMenuItems[1].subtitle = e.item.subtitle;
-             movieMenuItems[2].subtitle = e.item.subtitle;
-             movieMenuItems[3].subtitle = e.item.subtitle;
+             movieMenuItems[0].id = e.item.id;
+             movieMenuItems[1].id = e.item.id;
+             movieMenuItems[2].id = e.item.id;
+             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.title = e.item.title;
              movieMenu.show();  
           
              movieMenu.on('select', function(e) {  
@@ -374,7 +374,7 @@ movieListsMenu.on('select', function(e) {
                    // Make request to api.rottentomatoes.com for selected movie
                    ajax(
                    {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                      type:'json'
                    },
                    function(data) {
@@ -390,7 +390,7 @@ movieListsMenu.on('select', function(e) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                           type:'json'
                       },
                       function(data) {
@@ -425,7 +425,8 @@ movieListsMenu.on('select', function(e) {
           var id = data.movies[i].id;
           upcomingMovieItems.push({
             title: title,
-            subtitle: id,
+            subtitle: "",
+            id: id
           });
         }
         
@@ -440,12 +441,11 @@ movieListsMenu.on('select', function(e) {
         
         // Add action for selected 'Upcoming' movie
         upcomingMovieMenu.on('select', function(e) {
-             movieMenuItems[0].subtitle = e.item.subtitle;
-             movieMenuItems[1].subtitle = e.item.subtitle;
-             movieMenuItems[2].subtitle = e.item.subtitle;
-             movieMenuItems[3].subtitle = e.item.subtitle;
+             movieMenuItems[0].id = e.item.id;
+             movieMenuItems[1].id = e.item.id;
+             movieMenuItems[2].id = e.item.id;
+             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.title = e.item.title;
              movieMenu.show();    
              
              movieMenu.on('select', function(e) {  
@@ -454,7 +454,7 @@ movieListsMenu.on('select', function(e) {
                    // Make request to api.rottentomatoes.com for selected movie
                    ajax(
                    {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                      type:'json'
                    },
                    function(data) {
@@ -470,7 +470,7 @@ movieListsMenu.on('select', function(e) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                           type:'json'
                       },
                       function(data) {
@@ -507,7 +507,8 @@ dvdListsMenu.on('select', function(e) {
           var id = data.movies[i].id;
           topRentalsItems.push({
             title: title,
-            subtitle: id,
+            subtitle: "",
+            id: id
           });          
         }
        
@@ -522,12 +523,11 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Top Rental' dvd
         topRentalsMenu.on('select', function(e) {
-             movieMenuItems[0].subtitle = e.item.subtitle;
-             movieMenuItems[1].subtitle = e.item.subtitle;
-             movieMenuItems[2].subtitle = e.item.subtitle;
-             movieMenuItems[3].subtitle = e.item.subtitle;
+             movieMenuItems[0].id = e.item.id;
+             movieMenuItems[1].id = e.item.id;
+             movieMenuItems[2].id = e.item.id;
+             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.title = e.item.title;
              movieMenu.show();  
              
              movieMenu.on('select', function(e) {  
@@ -536,7 +536,7 @@ dvdListsMenu.on('select', function(e) {
                    // Make request to api.rottentomatoes.com for selected movie
                    ajax(
                    {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                      type:'json'
                    },
                    function(data) {
@@ -552,7 +552,7 @@ dvdListsMenu.on('select', function(e) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                           type:'json'
                       },
                       function(data) {
@@ -585,7 +585,8 @@ dvdListsMenu.on('select', function(e) {
           var id = data.movies[i].id;
           currentReleaseItems.push({
             title: title,
-            subtitle: id,
+            subtitle: "",
+            id: id
           });          
         }
        
@@ -600,12 +601,11 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Current Release DVDs' dvd
         currentReleaseMenu.on('select', function(e) {
-             movieMenuItems[0].subtitle = e.item.subtitle;
-             movieMenuItems[1].subtitle = e.item.subtitle;
-             movieMenuItems[2].subtitle = e.item.subtitle;
-             movieMenuItems[3].subtitle = e.item.subtitle;
-          
-             movieMenu.title = e.item.title;
+             movieMenuItems[0].id = e.item.id;
+             movieMenuItems[1].id = e.item.id;
+             movieMenuItems[2].id = e.item.id;
+             movieMenuItems[3].id = e.item.id;
+
              movieMenu.show();     
              
              movieMenu.on('select', function(e) {  
@@ -614,7 +614,7 @@ dvdListsMenu.on('select', function(e) {
                    // Make request to api.rottentomatoes.com for selected movie
                    ajax(
                    {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                      type:'json'
                    },
                    function(data) {
@@ -630,7 +630,7 @@ dvdListsMenu.on('select', function(e) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                           type:'json'
                       },
                       function(data) {
@@ -663,7 +663,8 @@ dvdListsMenu.on('select', function(e) {
           var id = data.movies[i].id;
           newReleaseItems.push({
             title: title,
-            subtitle: id,
+            subtitle: "",
+            id: id
           });          
         }
        
@@ -678,12 +679,11 @@ dvdListsMenu.on('select', function(e) {
        
         // Add action for selected 'Current Release DVDs' dvd
         newReleaseMenu.on('select', function(e) {
-             movieMenuItems[0].subtitle = e.item.subtitle;
-             movieMenuItems[1].subtitle = e.item.subtitle;
-             movieMenuItems[2].subtitle = e.item.subtitle;
-             movieMenuItems[3].subtitle = e.item.subtitle;
+             movieMenuItems[0].id = e.item.id;
+             movieMenuItems[1].id = e.item.id;
+             movieMenuItems[2].id = e.item.id;
+             movieMenuItems[3].id = e.item.id;
           
-             movieMenu.title = e.item.title;
              movieMenu.show();       
              
              movieMenu.on('select', function(e) {  
@@ -692,7 +692,7 @@ dvdListsMenu.on('select', function(e) {
                    // Make request to api.rottentomatoes.com for selected movie
                    ajax(
                    {
-                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                     url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                      type:'json'
                    },
                    function(data) {
@@ -708,7 +708,7 @@ dvdListsMenu.on('select', function(e) {
                     // Make request to api.rottentomatoes.com for selected movie's cast info
                     ajax(
                       {
-                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.subtitle + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
+                          url:'http://api.rottentomatoes.com/api/public/v1.0/movies/' + e.item.id + '/cast.json?apikey=3u9s7zwwta4u97p2q3fp7t6x',
                           type:'json'
                       },
                       function(data) {
