@@ -47,7 +47,7 @@ var movieListsMenuItems = [
 // Construct 'Movie Lists' menu 
 var movieListsMenu = new UI.Menu({
   sections: [{
-    title: 'Movie Lists',
+    title: 'Movies',
     items: movieListsMenuItems
   }]
 });
@@ -62,7 +62,7 @@ var dvdListsMenuItems = [
 // Construct 'DVD Lists' menu 
 var dvdListsMenu = new UI.Menu({
   sections: [{
-    title: 'DVD Lists',
+    title: 'DVDs',
     items: dvdListsMenuItems
   }]
 });
