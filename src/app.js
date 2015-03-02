@@ -23,8 +23,8 @@ splashWindow.show();
 
 // Create main menu items
 var mainMenuItems = [
-  {title: "Movie Lists", subtitle: ""}, 
-  {title: "DVD Lists", subtitle: ""}, 
+  {title: "Movies", subtitle: ""}, 
+  {title: "DVDs", subtitle: ""}, 
   {title: "About", subtitle: ""}, 
 ];
   
